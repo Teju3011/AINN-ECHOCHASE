@@ -101,7 +101,7 @@ export function ResultsPanel({ logs, rewards, step, simulationState, gridData, s
 
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-4 h-full">
       <Card>
         <CardHeader>
           <CardTitle>Simulation Stats</CardTitle>
@@ -117,6 +117,62 @@ export function ResultsPanel({ logs, rewards, step, simulationState, gridData, s
           </div>
         </CardContent>
       </Card>
+
+      <Card className="flex-1 flex flex-col">
+        <CardHeader>
+            <CardTitle>Game Console</CardTitle>
+            <CardDescription>Events and logs from the simulation.</CardDescription>
+        </CardHeader>
+        <CardContent className="flex-1 flex flex-col gap-4">
+            <ScrollArea className="flex-1 h-48" ref={scrollAreaRef}>
+                <div className="space-y-2 text-sm font-mono">
+                    {logs.map((log) => (
+                        <div key={log.step}>
+                           <span className="text-muted-foreground mr-2">[{log.step}]</span>
+                           {log.message}
+                        </div>
+                    ))}
+                </div>
+            </ScrollArea>
+        </CardContent>
+      </Card>
+      
+      <Card>
+        <CardHeader>
+            <CardTitle className="flex items-center gap-2"><Sparkles className="text-primary" size={20}/>AI Insights</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+            <div className="space-y-2">
+                <Button onClick={handleExplainPath} disabled={isExplaining || simulationState === 'running' || !gridData.path.length} className="w-full">
+                    {isExplaining && <Loader2 className="animate-spin" />}
+                    Explain Predator's Path
+                </Button>
+                {explanation && <Alert><AlertDescription>{explanation}</AlertDescription></Alert>}
+            </div>
+            <div className="space-y-2">
+                 <Button onClick={handleSuggestImprovements} disabled={isSuggesting || simulationState === 'running'} className="w-full" variant="secondary">
+                    {isSuggesting && <Loader2 className="animate-spin" />}
+                    <Wand2 className="mr-2"/>
+                    Suggest Improvements
+                </Button>
+                {suggestion && (
+                    <Alert>
+                        <AlertTitle>Suggestion</AlertTitle>
+                        <AlertDescription>
+                            <ul className="list-disc pl-5">
+                                <li><b>Grid Size:</b> {suggestion.suggestedGridSize}</li>
+                                <li><b>Obstacle Density:</b> {suggestion.suggestedObstacleDensity}</li>
+                                <li><b>Predator Algorithm:</b> {suggestion.suggestedPredatorAlgorithm}</li>
+                                <li><b>Prey Algorithm:</b> {suggestion.suggestedPreyAlgorithm}</li>
+                            </ul>
+                            <p className="mt-2">{suggestion.suggestionRationale}</p>
+                        </AlertDescription>
+                    </Alert>
+                )}
+            </div>
+        </CardContent>
+      </Card>
+
     </div>
   );
 }

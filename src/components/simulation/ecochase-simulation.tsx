@@ -219,22 +219,38 @@ export function EcoChaseSimulation() {
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <div className="flex h-full min-h-svh flex-col items-center justify-center gap-4 p-4 sm:p-6 lg:p-8">
-            <Card>
-                <CardHeader>
-                <CardTitle>Simulation Stats</CardTitle>
-                </CardHeader>
-                <CardContent className="grid grid-cols-2 gap-4 text-center">
-                <div>
-                    <p className="text-sm text-muted-foreground">Step</p>
-                    <p className="text-3xl font-bold font-headline">{step}</p>
-                </div>
-                <div>
-                    <p className="text-sm text-muted-foreground">Reward</p>
-                    <p className="text-3xl font-bold font-code text-primary">{rewards}</p>
-                </div>
-                </CardContent>
-            </Card>
+        <div className="p-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2">
+                <SimulationGrid
+                    gridSize={config.gridSize}
+                    predator={predatorPos}
+                    prey={prey}
+                    obstacles={obstacles}
+                    path={path}
+                />
+            </div>
+            <div className="lg:col-span-1">
+                 <ResultsPanel 
+                    logs={logs} 
+                    rewards={rewards} 
+                    step={step} 
+                    simulationState={simulationState}
+                    gridData={{
+                      gridSize: config.gridSize,
+                      predatorPosition: predatorPos,
+                      preyPositions: prey.map(p => p.position),
+                      obstaclePositions: obstacles,
+                      path: path,
+                      searchAlgorithm: config.predatorAlgo,
+                    }}
+                    simulationConfig={{
+                      gridSize: `${config.gridSize}x${config.gridSize}`,
+                      obstacleDensity: config.obstacleDensity < 0.33 ? 'low' : config.obstacleDensity < 0.66 ? 'medium' : 'high',
+                      predatorAlgorithm: config.predatorAlgo,
+                      preyAlgorithm: config.preyAlgo,
+                    }}
+                  />
+            </div>
         </div>
       </SidebarInset>
     </SidebarProvider>
