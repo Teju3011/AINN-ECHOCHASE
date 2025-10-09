@@ -40,14 +40,12 @@ const SuggestSimulationImprovementsOutputSchema = z.object({
   suggestedPredatorAlgorithm: z
     .string()
     .describe(
-      'A suggested predator algorithm to explore (e.g., BFS, A*, PPO, SAC).
-      If the current algorithm is a classical search algorithm, suggest a reinforcement learning algorithm, or vice versa.'
+      'A suggested predator algorithm to explore (e.g., BFS, A*, PPO, SAC). If the current algorithm is a classical search algorithm, suggest a reinforcement learning algorithm, or vice versa.'
     ),
   suggestedPreyAlgorithm: z
     .string()
     .describe(
-      'A suggested prey algorithm to explore (e.g., random, PPO, SAC).
-      If the current algorithm is random, suggest a reinforcement learning algorithm, or vice versa.'
+      'A suggested prey algorithm to explore (e.g., random, PPO, SAC). If the current algorithm is random, suggest a reinforcement learning algorithm, or vice versa.'
     ),
   suggestionRationale: z
     .string()
