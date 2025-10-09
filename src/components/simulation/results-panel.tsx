@@ -117,69 +117,6 @@ export function ResultsPanel({ logs, rewards, step, simulationState, gridData, s
           </div>
         </CardContent>
       </Card>
-
-      <Card className="flex flex-col flex-1">
-        <CardHeader>
-          <CardTitle>Event Log</CardTitle>
-          <CardDescription>
-            {simulationState === 'running' && 'Simulation in progress...'}
-            {simulationState === 'paused' && 'Simulation paused.'}
-            {simulationState === 'idle' && 'Simulation ready to start.'}
-            {simulationState === 'finished' && 'Simulation finished.'}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex-1 flex flex-col min-h-0">
-          <ScrollArea className="flex-1 pr-4 -mr-4" ref={scrollAreaRef}>
-            <div className="space-y-2 text-sm">
-              {logs.map((log, index) => (
-                <div key={index} className="flex gap-2">
-                  <span className="font-mono text-muted-foreground w-8 text-right shrink-0">{log.step}</span>
-                  <p className="flex-1">{log.message}</p>
-                </div>
-              ))}
-            </div>
-          </ScrollArea>
-        </CardContent>
-      </Card>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2"><Wand2 size={20}/> AI Insights</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Button className="w-full" onClick={handleExplainPath} disabled={isExplaining || gridData.path.length === 0}>
-              {isExplaining ? <Loader2 className="animate-spin"/> : <Sparkles size={16}/>} Explain Predator's Path
-            </Button>
-            {explanation && (
-                <Alert>
-                    <AlertTitle>Path Explanation</AlertTitle>
-                    <AlertDescription>{explanation}</AlertDescription>
-                </Alert>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Button className="w-full" variant="secondary" onClick={handleSuggestImprovements} disabled={isSuggesting || step === 0}>
-                {isSuggesting ? <Loader2 className="animate-spin"/> : <Sparkles size={16}/>} Suggest Improvements
-            </Button>
-            {suggestion && (
-                <Alert>
-                    <AlertTitle>Improvement Suggestion</AlertTitle>
-                    <AlertDescription>
-                        <ul className="list-disc pl-4 space-y-1">
-                            <li><strong>Grid Size:</strong> {suggestion.suggestedGridSize}</li>
-                            <li><strong>Obstacles:</strong> {suggestion.suggestedObstacleDensity}</li>
-                            <li><strong>Predator AI:</strong> {suggestion.suggestedPredatorAlgorithm}</li>
-                            <li><strong>Prey AI:</strong> {suggestion.suggestedPreyAlgorithm}</li>
-                        </ul>
-                        <p className="mt-2 text-xs">{suggestion.suggestionRationale}</p>
-                    </AlertDescription>
-                </Alert>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
     </div>
   );
 }

@@ -19,6 +19,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "../theme-toggle";
 import { Button } from "../ui/button";
 import { Squirrel } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 export function EcoChaseSimulation() {
   const { toast } = useToast();
@@ -154,7 +155,6 @@ export function EcoChaseSimulation() {
             }
 
             setPredatorPos(newPredatorPos);
-            newLogs.push({step: currentStep, message: `Predator moves to (${newPredatorPos.x}, ${newPredatorPos.y}) using ${config.predatorAlgo}.`});
 
             // 3. Check for capture
             const remainingPrey = newPrey.filter(p => {
@@ -219,36 +219,22 @@ export function EcoChaseSimulation() {
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <div className="flex h-full min-h-svh flex-col gap-4 p-4 sm:p-6 lg:p-8">
-          <main className="grid flex-1 gap-8" style={{gridTemplateColumns: '2fr 1fr'}}>
-            <SimulationGrid
-              gridSize={config.gridSize}
-              predator={predatorPos}
-              prey={prey}
-              obstacles={obstacles}
-              path={path}
-            />
-            <ResultsPanel
-              logs={logs}
-              rewards={rewards}
-              step={step}
-              simulationState={simulationState}
-              gridData={{
-                gridSize: config.gridSize,
-                predatorPosition: predatorPos,
-                preyPositions: prey.map(p => p.position),
-                obstaclePositions: obstacles,
-                path: path,
-                searchAlgorithm: config.predatorAlgo,
-              }}
-              simulationConfig={{
-                gridSize: `${config.gridSize}x${config.gridSize}`,
-                obstacleDensity: `${(config.obstacleDensity * 100).toFixed(0)}%`,
-                predatorAlgorithm: config.predatorAlgo,
-                preyAlgorithm: config.preyAlgo,
-              }}
-            />
-          </main>
+        <div className="flex h-full min-h-svh flex-col items-center justify-center gap-4 p-4 sm:p-6 lg:p-8">
+            <Card>
+                <CardHeader>
+                <CardTitle>Simulation Stats</CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-2 gap-4 text-center">
+                <div>
+                    <p className="text-sm text-muted-foreground">Step</p>
+                    <p className="text-3xl font-bold font-headline">{step}</p>
+                </div>
+                <div>
+                    <p className="text-sm text-muted-foreground">Reward</p>
+                    <p className="text-3xl font-bold font-code text-primary">{rewards}</p>
+                </div>
+                </CardContent>
+            </Card>
         </div>
       </SidebarInset>
     </SidebarProvider>
