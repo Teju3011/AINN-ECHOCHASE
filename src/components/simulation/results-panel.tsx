@@ -40,65 +40,12 @@ type ResultsPanelProps = {
 
 export function ResultsPanel({ logs, rewards, step, simulationState, gridData, simulationConfig }: ResultsPanelProps) {
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
-  const [isExplaining, setIsExplaining] = React.useState(false);
-  const [explanation, setExplanation] = React.useState<string | null>(null);
-  const [isSuggesting, setIsSuggesting] = React.useState(false);
-  const [suggestion, setSuggestion] = React.useState<any | null>(null);
-  const { toast } = useToast();
-
+  
   React.useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
     }
   }, [logs]);
-
-  const handleExplainPath = async () => {
-    setIsExplaining(true);
-    setExplanation(null);
-    try {
-        const { path, predatorPosition, obstaclePositions, gridSize, searchAlgorithm } = gridData;
-        const targetPrey = path.length > 0 ? path[path.length -1] : gridData.preyPositions[0];
-        
-        if (!targetPrey) {
-             toast({ variant: "destructive", title: "Cannot Explain Path", description: "No prey found to target." });
-             setIsExplaining(false);
-             return;
-        }
-
-        const res = await explainAISearchPath({
-            path: path,
-            predatorPosition: predatorPosition,
-            preyPosition: targetPrey,
-            obstaclePositions: obstaclePositions,
-            gridSize: gridSize,
-            searchAlgorithm: searchAlgorithm,
-        });
-        setExplanation(res.explanation);
-    } catch (e) {
-        toast({ variant: "destructive", title: "AI Explanation Failed", description: "Could not generate an explanation." });
-        console.error(e);
-    } finally {
-        setIsExplaining(false);
-    }
-  }
-
-  const handleSuggestImprovements = async () => {
-    setIsSuggesting(true);
-    setSuggestion(null);
-    try {
-        const res = await suggestSimulationImprovements({
-            ...simulationConfig,
-            simulationResults: logs.slice(-5).map(l => l.message).join('\n')
-        });
-        setSuggestion(res);
-    } catch (e) {
-        toast({ variant: "destructive", title: "AI Suggestion Failed", description: "Could not generate a suggestion." });
-        console.error(e);
-    } finally {
-        setIsSuggesting(false);
-    }
-  }
-
 
   return (
     <div className="flex flex-col gap-4 h-full">
@@ -136,43 +83,6 @@ export function ResultsPanel({ logs, rewards, step, simulationState, gridData, s
             </ScrollArea>
         </CardContent>
       </Card>
-      
-      <Card>
-        <CardHeader>
-            <CardTitle className="flex items-center gap-2"><Sparkles className="text-primary" size={20}/>AI Insights</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-            <div className="space-y-2">
-                <Button onClick={handleExplainPath} disabled={isExplaining || simulationState === 'running' || !gridData.path.length} className="w-full">
-                    {isExplaining && <Loader2 className="animate-spin" />}
-                    Explain Predator's Path
-                </Button>
-                {explanation && <Alert><AlertDescription>{explanation}</AlertDescription></Alert>}
-            </div>
-            <div className="space-y-2">
-                 <Button onClick={handleSuggestImprovements} disabled={isSuggesting || simulationState === 'running'} className="w-full" variant="secondary">
-                    {isSuggesting && <Loader2 className="animate-spin" />}
-                    <Wand2 className="mr-2"/>
-                    Suggest Improvements
-                </Button>
-                {suggestion && (
-                    <Alert>
-                        <AlertTitle>Suggestion</AlertTitle>
-                        <AlertDescription>
-                            <ul className="list-disc pl-5">
-                                <li><b>Grid Size:</b> {suggestion.suggestedGridSize}</li>
-                                <li><b>Obstacle Density:</b> {suggestion.suggestedObstacleDensity}</li>
-                                <li><b>Predator Algorithm:</b> {suggestion.suggestedPredatorAlgorithm}</li>
-                                <li><b>Prey Algorithm:</b> {suggestion.suggestedPreyAlgorithm}</li>
-                            </ul>
-                            <p className="mt-2">{suggestion.suggestionRationale}</p>
-                        </AlertDescription>
-                    </Alert>
-                )}
-            </div>
-        </CardContent>
-      </Card>
-
     </div>
   );
 }

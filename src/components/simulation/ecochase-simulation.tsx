@@ -219,17 +219,8 @@ export function EcoChaseSimulation() {
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <div className="p-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2">
-                <SimulationGrid
-                    gridSize={config.gridSize}
-                    predator={predatorPos}
-                    prey={prey}
-                    obstacles={obstacles}
-                    path={path}
-                />
-            </div>
-            <div className="lg:col-span-1">
+        <div className="p-4 flex h-full items-center justify-center">
+            <div className="w-full max-w-md">
                  <ResultsPanel 
                     logs={logs} 
                     rewards={rewards} 
