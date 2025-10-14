@@ -219,27 +219,22 @@ export function EcoChaseSimulation() {
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <div className="p-4 flex h-full items-center justify-center">
-            <div className="w-full max-w-md">
+        <div className="p-4 grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
+            <div className="lg:col-span-2 flex flex-col">
+                 <SimulationGrid 
+                    gridSize={config.gridSize}
+                    predator={predatorPos}
+                    prey={prey}
+                    obstacles={obstacles}
+                    path={path}
+                  />
+            </div>
+            <div className="lg:col-span-1">
                  <ResultsPanel 
                     logs={logs} 
                     rewards={rewards} 
                     step={step} 
                     simulationState={simulationState}
-                    gridData={{
-                      gridSize: config.gridSize,
-                      predatorPosition: predatorPos,
-                      preyPositions: prey.map(p => p.position),
-                      obstaclePositions: obstacles,
-                      path: path,
-                      searchAlgorithm: config.predatorAlgo,
-                    }}
-                    simulationConfig={{
-                      gridSize: `${config.gridSize}x${config.gridSize}`,
-                      obstacleDensity: config.obstacleDensity < 0.33 ? 'low' : config.obstacleDensity < 0.66 ? 'medium' : 'high',
-                      predatorAlgorithm: config.predatorAlgo,
-                      preyAlgorithm: config.preyAlgo,
-                    }}
                   />
             </div>
         </div>

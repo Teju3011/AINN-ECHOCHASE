@@ -10,35 +10,16 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SimulationLog, SimulationState } from "@/lib/types";
-import { Button } from "../ui/button";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { Loader2, Sparkles, Wand2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { explainAISearchPath } from "@/ai/flows/explain-ai-search-path";
-import { suggestSimulationImprovements } from "@/ai/flows/suggest-simulation-improvements";
+
 
 type ResultsPanelProps = {
   logs: SimulationLog[];
   rewards: number;
   step: number;
   simulationState: SimulationState;
-  gridData: {
-    gridSize: number;
-    predatorPosition: { x: number, y: number };
-    preyPositions: { x: number, y: number }[];
-    obstaclePositions: { x: number, y: number }[];
-    path: { x: number, y: number }[];
-    searchAlgorithm: string;
-  },
-  simulationConfig: {
-    gridSize: string;
-    obstacleDensity: string;
-    predatorAlgorithm: string;
-    preyAlgorithm: string;
-  }
 };
 
-export function ResultsPanel({ logs, rewards, step, simulationState, gridData, simulationConfig }: ResultsPanelProps) {
+export function ResultsPanel({ logs, rewards, step, simulationState }: ResultsPanelProps) {
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
   
   React.useEffect(() => {
